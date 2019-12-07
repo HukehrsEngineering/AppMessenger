@@ -12,7 +12,7 @@ class AllSubscriber(private val messenger: AppMessenger): ISubscriber {
     var messageCount = 0
 
     init {
-        messenger.subscribeAll(this)
+        messenger.subscribe<IAppMessage>(this)
     }
 
     override suspend fun receive(message: IAppMessage) {
