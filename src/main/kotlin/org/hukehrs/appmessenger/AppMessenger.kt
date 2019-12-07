@@ -86,7 +86,7 @@ open class AppMessenger(val name: String,
 
     fun <T> getSubscribers(messageClass: Class<T>): List<ISubscriber> {
         return lock.read {
-            val classSubscribers = subscribers[messageClass]?.toMutableList() ?: mutableListOf()
+            val classSubscribers = subscribers.filter { it.key.isAssignableFrom(messageClass) }.values.flatten().toMutableList()
             classSubscribers.addAll(allSubscribers)
             classSubscribers
         }
