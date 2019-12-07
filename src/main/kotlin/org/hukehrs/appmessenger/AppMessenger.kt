@@ -18,7 +18,7 @@ open class AppMessenger(val name: String,
         val log = LoggerFactory.getLogger(AppMessenger::class.java)!!
     }
 
-    private val subscribers = mutableMapOf<String, MutableList<ISubscriber>>()
+    private val subscribers = mutableMapOf<Class<*>, MutableList<ISubscriber>>()
 
     private val allSubscribers = mutableListOf<ISubscriber>()
 
@@ -38,14 +38,12 @@ open class AppMessenger(val name: String,
     fun <T: IAppMessage>subscribe(subscriber: ISubscriber, cls: Class<T>)
     {
         lock.write {
-            val name = cls.name
-
-            if(!subscribers.containsKey(name))
+            if(!subscribers.containsKey(cls))
             {
-                subscribers[name] = mutableListOf()
+                subscribers[cls] = mutableListOf()
             }
 
-            subscribers[name]!!.add(subscriber)
+            subscribers[cls]!!.add(subscriber)
         }
     }
 
@@ -88,7 +86,7 @@ open class AppMessenger(val name: String,
 
     fun <T> getSubscribers(messageClass: Class<T>): List<ISubscriber> {
         return lock.read {
-            val classSubscribers = subscribers[messageClass.name]?.toMutableList() ?: mutableListOf()
+            val classSubscribers = subscribers[messageClass]?.toMutableList() ?: mutableListOf()
             classSubscribers.addAll(allSubscribers)
             classSubscribers
         }
