@@ -10,7 +10,7 @@ import kotlin.concurrent.read
 import kotlin.concurrent.write
 
 @Suppress("MemberVisibilityCanBePrivate")
-open class AppMessenger(val name: String,
+open class AppMessenger<T: IAppMessage>(val name: String,
                         private val sendScope: CoroutineScope = SendScope(name),
                         private val receiveScope: CoroutineScope = ReceiveScope(name)) {
 
@@ -26,7 +26,7 @@ open class AppMessenger(val name: String,
 
     private var throwErrors = true
 
-    fun <T: IAppMessage>subscribe(subscriber: ISubscriber, cls: Class<T>)
+    fun subscribe(subscriber: ISubscriber, cls: Class<T>)
     {
         lock.write {
             if(!subscribers.containsKey(cls))
@@ -38,16 +38,17 @@ open class AppMessenger(val name: String,
         }
     }
 
-    inline fun <reified T: IAppMessage>subscribe(subscriber: ISubscriber)
+    inline fun <reified TT: T>subscribe(subscriber: ISubscriber)
     {
-        subscribe(subscriber, T::class.java)
+        @Suppress("UNCHECKED_CAST")
+        subscribe(subscriber, TT::class.java as Class<T>)
     }
 
-    fun publishAsync(message: IAppMessage) {
+    fun publishAsync(message: T) {
         publish(message, true)
     }
 
-    fun publishSync(message: IAppMessage) {
+    fun publishSync(message: T) {
         publish(message, false)
     }
 

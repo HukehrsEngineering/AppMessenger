@@ -8,12 +8,15 @@ open class ParentMessage: IAppMessage
 
 class ChildMessage: ParentMessage()
 
-class HierarchySubscriber(private val messenger: AppMessenger): ISubscriber {
+class HierarchySubscriber(private val messenger: AppMessenger<ParentMessage>): ISubscriber {
 
     var messageCount = 0
 
     init {
         messenger.subscribe<ParentMessage>(this)
+
+        //following will not work
+        //messenger.subscribe<Message>()
     }
 
     override suspend fun receive(message: IAppMessage) {
@@ -27,11 +30,11 @@ class HierarchySubscriber(private val messenger: AppMessenger): ISubscriber {
 }
 
 fun main() {
-    val messenger = AppMessenger("AllSubscriberTest")
+    val messenger = AppMessenger<ParentMessage>("AllSubscriberTest")
     val subscriber = HierarchySubscriber(messenger)
 
     messenger.publishSync(ParentMessage())
     messenger.publishSync(ChildMessage())
 
-    println("subscriber got ${subscriber.messageCount} messages")
+    println("subscriber got ${subscriber.messageCount} of 2 expected messages")
 }

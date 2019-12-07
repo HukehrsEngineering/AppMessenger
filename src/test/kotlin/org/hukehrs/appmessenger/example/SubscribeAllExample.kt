@@ -7,7 +7,7 @@ import org.hukehrs.appmessenger.ISubscriber
 
 class OtherMessage: IAppMessage
 
-class AllSubscriber(private val messenger: AppMessenger): ISubscriber {
+class AllSubscriber(private val messenger: AppMessenger<IAppMessage>): ISubscriber {
 
     var messageCount = 0
 
@@ -26,11 +26,11 @@ class AllSubscriber(private val messenger: AppMessenger): ISubscriber {
 }
 
 fun main() {
-    val messenger = AppMessenger("AllSubscriberTest")
+    val messenger = AppMessenger<IAppMessage>("AllSubscriberTest")
     val subscriber = AllSubscriber(messenger)
 
     messenger.publishSync(Message())
     messenger.publishSync(OtherMessage())
 
-    println("subscriber got ${subscriber.messageCount} messages")
+    println("subscriber got ${subscriber.messageCount} of 2 messages")
 }

@@ -8,4 +8,4 @@ package org.hukehrs.appmessenger
  * If you have many different worker contexts with tasks in parallel you might want to create additional Messengers
  * This way each messenger should represent one context
  */
-object GlobalAppMessenger: AppMessenger("Global")
+object GlobalAppMessenger: AppMessenger<IAppMessage>("Global")

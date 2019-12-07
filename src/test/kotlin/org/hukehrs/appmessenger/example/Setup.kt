@@ -1,10 +1,11 @@
 package org.hukehrs.appmessenger.example
 
 import org.hukehrs.appmessenger.AppMessenger
+import org.hukehrs.appmessenger.IAppMessage
 
 fun setup(): MessengerSubscriberTuple {
     // choose one
-    val messenger = AppMessenger("Example")
+    val messenger = AppMessenger<IAppMessage>("Example")
     //val messenger = GlobalAppMessenger()
 
     val firstSubscriber = ExampleSubscriber(messenger, "first-service", 1600, false)

@@ -5,7 +5,7 @@ import org.hukehrs.appmessenger.AppMessenger
 import org.hukehrs.appmessenger.IAppMessage
 import org.hukehrs.appmessenger.ISubscriber
 
-class ExampleSubscriber(private val messenger: AppMessenger,
+class ExampleSubscriber(private val messenger: AppMessenger<IAppMessage>,
                         private val name: String,
                         private val delay: Long,
                         private val throwException: Boolean): ISubscriber {
