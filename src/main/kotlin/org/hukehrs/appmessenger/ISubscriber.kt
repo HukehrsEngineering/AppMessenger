@@ -7,5 +7,5 @@ package org.hukehrs.appmessenger
  * the close() method
  */
 interface ISubscriber : AutoCloseable {
-    suspend fun receive(message: IEventMessage)
+    suspend fun receive(message: IAppMessage)
 }

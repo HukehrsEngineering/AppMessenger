@@ -1,11 +1,11 @@
 package org.hukehrs.appmessenger.example
 
 import org.hukehrs.appmessenger.AppMessenger
-import org.hukehrs.appmessenger.IEventMessage
+import org.hukehrs.appmessenger.IAppMessage
 import org.hukehrs.appmessenger.ISubscriber
 
 
-class OtherMessage: IEventMessage
+class OtherMessage: IAppMessage
 
 class AllSubscriber(private val messenger: AppMessenger): ISubscriber {
 
@@ -15,7 +15,7 @@ class AllSubscriber(private val messenger: AppMessenger): ISubscriber {
         messenger.subscribeAll(this)
     }
 
-    override suspend fun receive(message: IEventMessage) {
+    override suspend fun receive(message: IAppMessage) {
         println("received message of type ${message::class.java.name}")
         messageCount++
     }

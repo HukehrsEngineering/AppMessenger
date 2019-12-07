@@ -1,4 +1,4 @@
 package org.hukehrs.appmessenger
 
-interface IEventMessage {
+interface IAppMessage {
 }

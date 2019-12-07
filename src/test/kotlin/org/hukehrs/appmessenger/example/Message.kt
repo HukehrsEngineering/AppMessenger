@@ -1,5 +1,5 @@
 package org.hukehrs.appmessenger.example
 
-import org.hukehrs.appmessenger.IEventMessage
+import org.hukehrs.appmessenger.IAppMessage
 
-class Message: IEventMessage
+class Message: IAppMessage

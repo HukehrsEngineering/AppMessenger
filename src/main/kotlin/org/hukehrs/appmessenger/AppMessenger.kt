@@ -35,7 +35,7 @@ open class AppMessenger(val name: String,
         }
     }
 
-    fun <T: IEventMessage>subscribe(subscriber: ISubscriber, cls: Class<T>)
+    fun <T: IAppMessage>subscribe(subscriber: ISubscriber, cls: Class<T>)
     {
         lock.write {
             val name = cls.name
@@ -49,20 +49,20 @@ open class AppMessenger(val name: String,
         }
     }
 
-    inline fun <reified T: IEventMessage>subscribe(subscriber: ISubscriber)
+    inline fun <reified T: IAppMessage>subscribe(subscriber: ISubscriber)
     {
         subscribe(subscriber, T::class.java)
     }
 
-    fun publishAsync(message: IEventMessage) {
+    fun publishAsync(message: IAppMessage) {
         publish(message, true)
     }
 
-    fun publishSync(message: IEventMessage) {
+    fun publishSync(message: IAppMessage) {
         publish(message, false)
     }
 
-    private fun publish(message: IEventMessage, async: Boolean)
+    private fun publish(message: IAppMessage, async: Boolean)
     {
         val stacktrace = if(debug) {
             val trace = Thread.currentThread().stackTrace.drop(1)
@@ -98,7 +98,7 @@ open class AppMessenger(val name: String,
 
     private suspend fun publishToSubscribers(
         currentSubscribers: List<ISubscriber>,
-        message: IEventMessage,
+        message: IAppMessage,
         async: Boolean,
         stacktrace: List<StackTraceElement>?
     ) {
@@ -115,7 +115,7 @@ open class AppMessenger(val name: String,
         }
     }
 
-    private suspend fun publishToSubscriber(it: ISubscriber, message: IEventMessage, stacktrace: List<StackTraceElement>?) {
+    private suspend fun publishToSubscriber(it: ISubscriber, message: IAppMessage, stacktrace: List<StackTraceElement>?) {
         try {
             it.receive(message)
         } catch (e: Exception) {

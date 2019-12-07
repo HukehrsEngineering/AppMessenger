@@ -2,7 +2,7 @@ package org.hukehrs.appmessenger.example
 
 import kotlinx.coroutines.delay
 import org.hukehrs.appmessenger.AppMessenger
-import org.hukehrs.appmessenger.IEventMessage
+import org.hukehrs.appmessenger.IAppMessage
 import org.hukehrs.appmessenger.ISubscriber
 
 class ExampleSubscriber(private val messenger: AppMessenger,
@@ -14,7 +14,7 @@ class ExampleSubscriber(private val messenger: AppMessenger,
         messenger.subscribe<Message>(this)
     }
 
-    override suspend fun receive(message: IEventMessage) {
+    override suspend fun receive(message: IAppMessage) {
         when(message) {
             is Message -> calculate()
         }
