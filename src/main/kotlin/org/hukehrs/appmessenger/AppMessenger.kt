@@ -24,7 +24,7 @@ open class AppMessenger<T: IAppMessage>(val name: String,
 
     var debug = false
 
-    private var throwErrors = true
+    var throwErrors = true
 
     fun subscribe(subscriber: ISubscriber, cls: Class<T>)
     {
