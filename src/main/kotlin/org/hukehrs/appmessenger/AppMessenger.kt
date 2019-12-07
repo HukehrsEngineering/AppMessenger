@@ -24,6 +24,8 @@ open class AppMessenger(val name: String,
 
     var debug = false
 
+    private var throwErrors = true
+
     fun <T: IAppMessage>subscribe(subscriber: ISubscriber, cls: Class<T>)
     {
         lock.write {
@@ -102,12 +104,11 @@ open class AppMessenger(val name: String,
         try {
             it.receive(message)
         } catch (e: Exception) {
-            if (debug) {
-                log.debug("[{}AppMessenger]: exception while publishing event: {} {}\n{}\nreceived from\n" +
-                        "{}",
-                    name, e::class.java.simpleName, e.message, e.stackTrace.printableStacktrace(1), stacktrace?.printableStacktrace())
-            } else {
+            if (throwErrors) {
                 throw e
+            } else {
+                log.debug("[{}AppMessenger]: suppressed exception while publishing event: {} {}\n{}\nreceived from\n{}",
+                    name, e::class.java.simpleName, e.message, e.stackTrace.printableStacktrace(1), stacktrace?.printableStacktrace())
             }
         }
     }
