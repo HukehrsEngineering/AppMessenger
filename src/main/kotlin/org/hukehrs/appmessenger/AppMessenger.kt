@@ -20,9 +20,20 @@ open class AppMessenger(val name: String,
 
     private val subscribers = mutableMapOf<String, MutableList<ISubscriber>>()
 
+    private val allSubscribers = mutableListOf<ISubscriber>()
+
     private val lock = ReentrantReadWriteLock()
 
     var debug = false
+
+    fun subscribeAll(subscriber: ISubscriber)
+    {
+        lock.write {
+            if(!allSubscribers.contains(subscriber)) {
+                allSubscribers.add(subscriber)
+            }
+        }
+    }
 
     fun <T: IEventMessage>subscribe(subscriber: ISubscriber, cls: Class<T>)
     {
@@ -77,7 +88,9 @@ open class AppMessenger(val name: String,
 
     fun <T> getSubscribers(messageClass: Class<T>): List<ISubscriber> {
         return lock.read {
-            subscribers[messageClass.name]?.toList() ?: emptyList()
+            val classSubscribers = subscribers[messageClass.name]?.toMutableList() ?: mutableListOf()
+            classSubscribers.addAll(allSubscribers)
+            classSubscribers
         }
     }
 
@@ -120,6 +133,9 @@ open class AppMessenger(val name: String,
         lock.write {
             subscribers.values.forEach {
                 it.remove(subscriber)
+            }
+            if(allSubscribers.contains(subscriber)) {
+                allSubscribers.remove(subscriber)
             }
         }
     }
